@@ -6,7 +6,13 @@
     "norms": ["敏捷开发", "OKR考核", "股权激励", "弹性工作"],
     "keyTerms": ["SLA", "源码交付", "数据所有权", "竞业限制"],
     "averageCycle": "1-3个月",
-    "commonDisputes": ["交付质量", "需求变更", "验收标准"]
+    "commonDisputes": ["交付质量", "需求变更", "验收标准"],
+    "benchmarks": {
+      "softwareDev": {"low": 10, "mid": 50, "high": 200, "unit": "万元"},
+      "annualMaintenance": {"low": 15, "mid": 30, "high": 50, "unit": "万元/年"},
+      "dailyRate": {"low": 2000, "mid": 4000, "high": 8000, "unit": "元/人天"}
+    },
+    "legalNotes": ["算法备案义务", "数据出境安全评估", "AI生成内容标识"]
   },
   {
     "id": "manufacturing",
@@ -15,7 +21,13 @@
     "norms": ["ISO体系", "质检流程", "账期结算", "售后保修"],
     "keyTerms": ["质检标准", "交货期", "质保期", "退换货"],
     "averageCycle": "3-6个月",
-    "commonDisputes": ["质量问题", "交货延误", "价格调整"]
+    "commonDisputes": ["质量问题", "交货延误", "价格调整"],
+    "benchmarks": {
+      "oemMargin": {"low": 5, "mid": 10, "high": 15, "unit": "%"},
+      "odmMargin": {"low": 15, "mid": 25, "high": 35, "unit": "%"},
+      "leadTime": {"low": 15, "mid": 30, "high": 60, "unit": "天"}
+    },
+    "legalNotes": ["产品责任", "环保排污许可", "安全生产标准化"]
   },
   {
     "id": "finance",
@@ -24,7 +36,13 @@
     "norms": ["监管审查", "风控流程", "信息披露", "KYC"],
     "keyTerms": ["保证金", "杠杆率", "风险敞口", "违约事件"],
     "averageCycle": "1-2个月",
-    "commonDisputes": ["费率争议", "理赔纠纷", "合规解释"]
+    "commonDisputes": ["费率争议", "理赔纠纷", "合规解释"],
+    "benchmarks": {
+      "consultingFee": {"low": 50, "mid": 150, "high": 500, "unit": "万元"},
+      "systemDev": {"low": 200, "mid": 800, "high": 3000, "unit": "万元"},
+      "annualLicense": {"low": 30, "mid": 100, "high": 500, "unit": "万元/年"}
+    },
+    "legalNotes": ["反洗钱义务", "金融消费者保护", "数据本地化要求"]
   },
   {
     "id": "retail",
@@ -33,7 +51,13 @@
     "norms": ["账期结算", "退换货政策", "促销规则", "供应商评级"],
     "keyTerms": ["进场费", "扣点", "退货率", "保质期"],
     "averageCycle": "2-4周",
-    "commonDisputes": ["退货处理", "费用结算", "促销分摊"]
+    "commonDisputes": ["退货处理", "费用结算", "促销分摊"],
+    "benchmarks": {
+      "wholesaleDiscount": {"low": 10, "mid": 25, "high": 45, "unit": "%"},
+      "returnRate": {"low": 2, "mid": 8, "high": 15, "unit": "%"},
+      "paymentCycle": {"low": 15, "mid": 30, "high": 60, "unit": "天"}
+    },
+    "legalNotes": ["电子商务法合规", "消费者权益保护", "价格欺诈防范"]
   },
   {
     "id": "construction",
@@ -42,7 +66,13 @@
     "norms": ["施工资质", "安全规范", "验收标准", "质保期"],
     "keyTerms": ["工程量", "签证", "变更单", "竣工结算"],
     "averageCycle": "6-12个月",
-    "commonDisputes": ["工程款结算", "质量缺陷", "工期索赔"]
+    "commonDisputes": ["工程款结算", "质量缺陷", "工期索赔"],
+    "benchmarks": {
+      "projectMargin": {"low": 5, "mid": 12, "high": 25, "unit": "%"},
+      "retentionRate": {"low": 3, "mid": 5, "high": 10, "unit": "%"},
+      "warrantyPeriod": {"low": 1, "mid": 2, "high": 5, "unit": "年"}
+    },
+    "legalNotes": ["建筑工程质量保修", "安全生产责任", "工程款优先受偿"]
   },
   {
     "id": "healthcare",
@@ -51,6 +81,72 @@
     "norms": ["GMP规范", "临床试验", "不良反应报告", "隐私保护"],
     "keyTerms": ["临床数据", "不良反应", "药品批号", "知情同意"],
     "averageCycle": "3-6个月",
-    "commonDisputes": ["药品质量问题", "数据使用争议", "合规解释"]
+    "commonDisputes": ["药品质量问题", "数据使用争议", "合规解释"],
+    "benchmarks": {
+      "clinicalTrial": {"low": 500, "mid": 2000, "high": 10000, "unit": "万元"},
+      "drugDev": {"low": 1000, "mid": 5000, "high": 50000, "unit": "万元"},
+      "medicalDevice": {"low": 50, "mid": 200, "high": 1000, "unit": "万元"}
+    },
+    "legalNotes": ["个人信息保护法（敏感信息）", "药品管理法", "医疗器械监督管理条例"]
+  },
+  {
+    "id": "education",
+    "name": "教育/培训",
+    "risks": ["教学质量", "师资流失", "政策变化", "招生风险", "知识产权"],
+    "norms": ["办学资质", "课程审核", "师资标准", "退费规则"],
+    "keyTerms": ["课时", "师资配比", "教学成果", "退费周期"],
+    "averageCycle": "1-3个月",
+    "commonDisputes": ["退费纠纷", "教学质量", "虚假宣传"],
+    "benchmarks": {
+      "courseFee": {"low": 2000, "mid": 8000, "high": 30000, "unit": "元/期"},
+      "instructorRate": {"low": 150, "mid": 400, "high": 1000, "unit": "元/课时"},
+      "refundPeriod": {"low": 3, "mid": 7, "high": 15, "unit": "天"}
+    },
+    "legalNotes": ["教育培训合同纠纷", "消费者权益保护", "预付费管理"]
+  },
+  {
+    "id": "energy",
+    "name": "能源/新能源",
+    "risks": ["政策补贴", "技术路线", "环保合规", "安全事故", "资源价格波动"],
+    "norms": ["能评审批", "环评审批", "安全生产", "电力并网"],
+    "keyTerms": ["发电量", "并网价", "碳排放", "补贴政策"],
+    "averageCycle": "6-24个月",
+    "commonDisputes": ["补贴结算", "电力交易", "设备质量"],
+    "benchmarks": {
+      "solarMW": {"low": 300, "mid": 400, "high": 500, "unit": "万元/MW"},
+      "windMW": {"low": 700, "mid": 900, "high": 1200, "unit": "万元/MW"},
+      "paybackPeriod": {"low": 5, "mid": 8, "high": 12, "unit": "年"}
+    },
+    "legalNotes": ["可再生能源法", "碳排放权交易", "电力市场改革"]
+  },
+  {
+    "id": "automotive",
+    "name": "汽车/交通",
+    "risks": ["供应链中断", "技术标准变化", "安全事故", "环保法规", "国际贸易壁垒"],
+    "norms": ["IATF16949", "召回制度", "三包政策", "排放标准"],
+    "keyTerms": ["OEM配套", "年降", "模具费", "PPAP"],
+    "averageCycle": "6-18个月",
+    "commonDisputes": ["质量问题索赔", "年降谈判", "模具归属"],
+    "benchmarks": {
+      "partsMargin": {"low": 5, "mid": 10, "high": 20, "unit": "%"},
+      "annualReduction": {"low": 2, "mid": 5, "high": 8, "unit": "%/年"},
+      "warrantyMileage": {"low": 3, "mid": 5, "high": 10, "unit": "万公里"}
+    },
+    "legalNotes": ["缺陷汽车产品召回", "机动车排放标准", "智能网联汽车法规"]
+  },
+  {
+    "id": "real-estate",
+    "name": "房地产/物业",
+    "risks": ["市场下行", "资金链断裂", "政策调控", "交付风险", "物业管理纠纷"],
+    "norms": ["预售许可", "竣工验收", "物业管理", "维修基金"],
+    "keyTerms": ["容积率", "预售证", "交房标准", "物业费"],
+    "averageCycle": "3-24个月",
+    "commonDisputes": ["延期交付", "面积差异", "质量问题", "物业纠纷"],
+    "benchmarks": {
+      "devMargin": {"low": 8, "mid": 15, "high": 30, "unit": "%"},
+      "propertyFee": {"low": 1, "mid": 3, "high": 8, "unit": "元/㎡/月"},
+      "deliveryPeriod": {"low": 12, "mid": 24, "high": 36, "unit": "个月"}
+    },
+    "legalNotes": ["商品房销售管理办法", "物业管理条例", "房屋质量保修"]
   }
 ]

@@ -1,0 +1,180 @@
+[
+  {
+    "id": "payment-term",
+    "category": "付款条款",
+    "clauses": [
+      {
+        "id": "prepayment",
+        "name": "预付款条款",
+        "standardText": "甲方应在合同签订后【X】个工作日内，向乙方支付合同总额的【X】%作为预付款。",
+        "riskLevel": "low",
+        "negotiationPoints": ["预付比例（通常10-30%）", "预付款退还条件", "预付款抵扣方式"],
+        "recommendedRange": "10%-30%"
+      },
+      {
+        "id": "milestone-payment",
+        "name": "里程碑付款",
+        "standardText": "项目款项分【X】期支付：1）合同签订后支付【X】%；2）中期里程碑完成时支付【X】%；3）验收合格后支付【X】%；4）质保期满后支付【X】%。",
+        "riskLevel": "low",
+        "negotiationPoints": ["里程碑定义", "验收标准", "付款触发条件"],
+        "recommendedStructure": "3-3-3-1"
+      },
+      {
+        "id": "penalty-interest",
+        "name": "逾期付款利息",
+        "standardText": "甲方逾期付款的，应按逾期金额的【X】%/日向乙方支付违约金，最高不超过逾期金额的【X】%。",
+        "riskLevel": "medium",
+        "negotiationPoints": ["利率水平", "最高限额", "起算日"],
+        "recommendedRange": "日万分之三至五，上限5%"
+      }
+    ]
+  },
+  {
+    "id": "liability",
+    "category": "责任条款",
+    "clauses": [
+      {
+        "id": "liability-cap",
+        "name": "责任上限",
+        "standardText": "除故意或重大过失外，乙方对甲方的赔偿责任总额不超过本合同项下已收款项的【X】倍/合同总额的【X】%。",
+        "riskLevel": "high",
+        "negotiationPoints": ["上限金额", "除外情形（故意/重大过失）", "间接损失排除"],
+        "recommendedCap": "合同总额的100%-200%"
+      },
+      {
+        "id": "indemnification",
+        "name": "赔偿条款",
+        "standardText": "任何一方因违反本合同约定给对方造成损失的，违约方应赔偿守约方因此遭受的直接经济损失。",
+        "riskLevel": "medium",
+        "negotiationPoints": ["赔偿范围（直接损失 vs 间接损失）", "举证责任", "通知义务"],
+        "recommendedScope": "仅限直接经济损失"
+      },
+      {
+        "id": "force-majeure",
+        "name": "不可抗力条款",
+        "standardText": "因不可抗力导致任何一方不能履行本合同义务的，该方不承担违约责任，但应在不可抗力发生后【X】日内书面通知对方，并在【X】日内提供相关证明。",
+        "riskLevel": "low",
+        "negotiationPoints": ["不可抗力定义范围", "通知时限", "合同解除条件"],
+        "recommendedDefinition": "自然灾害、政府行为、社会异常事件"
+      }
+    ]
+  },
+  {
+    "id": "ip",
+    "category": "知识产权条款",
+    "clauses": [
+      {
+        "id": "ip-ownership",
+        "name": "知识产权归属",
+        "standardText": "本项目产生的知识产权归【甲方/乙方/双方共有】所有。各方在签订本合同前已拥有的知识产权仍归原所有方所有。",
+        "riskLevel": "high",
+        "negotiationPoints": ["归属方", "背景IP vs 前景IP", "共有IP的行使规则"],
+        "recommendedApproach": "明确区分背景IP和前景IP，各归其主"
+      },
+      {
+        "id": "source-code",
+        "name": "源码交付",
+        "standardText": "乙方应在项目验收后【X】个工作日内向甲方交付全部源代码及技术文档，并配合甲方完成代码审查。",
+        "riskLevel": "medium",
+        "negotiationPoints": ["交付范围", "交付时间", "技术支持期"],
+        "recommendedTiming": "验收后5-10个工作日"
+      },
+      {
+        "id": "open-source",
+        "name": "开源组件声明",
+        "standardText": "乙方应在交付物中附上所有使用的开源组件清单，包括组件名称、版本号和许可证类型。",
+        "riskLevel": "medium",
+        "negotiationPoints": ["清单完整度", "许可证兼容性", "合规承诺"],
+        "requiredInfo": "名称、版本、许可证类型"
+      }
+    ]
+  },
+  {
+    "id": "confidentiality",
+    "category": "保密条款",
+    "clauses": [
+      {
+        "id": "nda",
+        "name": "保密义务",
+        "standardText": "双方对在本合同签订及履行过程中知悉的对方商业秘密和保密信息，负有保密义务，保密期限为合同终止后【X】年。",
+        "riskLevel": "medium",
+        "negotiationPoints": ["保密信息范围", "保密期限", "违约责任"],
+        "recommendedDuration": "2-3年"
+      },
+      {
+        "id": "data-protection",
+        "name": "数据保护",
+        "standardText": "乙方应按照《个人信息保护法》等相关法律法规的要求，采取必要的技术和管理措施保护甲方数据安全。",
+        "riskLevel": "high",
+        "negotiationPoints": ["数据处理范围", "安全措施", "数据跨境传输", "泄露通知"],
+        "complianceRequirements": ["个人信息保护法", "数据安全法", "网络安全法"]
+      }
+    ]
+  },
+  {
+    "id": "termination",
+    "category": "终止条款",
+    "clauses": [
+      {
+        "id": "termination-for-convenience",
+        "name": "任意解除权",
+        "standardText": "任何一方在提前【X】日书面通知对方的前提下，可随时解除本合同。",
+        "riskLevel": "high",
+        "negotiationPoints": ["通知期", "提前解除补偿", "已完成工作的结算"],
+        "recommendedNotice": "30-60天"
+      },
+      {
+        "id": "termination-for-cause",
+        "name": "违约解除",
+        "standardText": "一方发生以下违约行为的，另一方有权解除合同：1）逾期交付超过【X】天；2）质量不达标且经【X】次整改仍不合格；3）违反保密义务。",
+        "riskLevel": "medium",
+        "negotiationPoints": ["违约情形定义", "整改次数", "解除后果"],
+        "recommendedCure": "允许1-2次整改机会"
+      }
+    ]
+  },
+  {
+    "id": "dispute-resolution",
+    "category": "争议解决条款",
+    "clauses": [
+      {
+        "id": "arbitration",
+        "name": "仲裁条款",
+        "standardText": "因本合同引起的或与本合同有关的任何争议，应提交【中国国际经济贸易仲裁委员会/上海仲裁委员会】按其仲裁规则进行仲裁。",
+        "riskLevel": "medium",
+        "negotiationPoints": ["仲裁机构", "仲裁地", "仲裁语言", "仲裁裁决执行"],
+        "recommendedSeats": ["CIETAC 北京", "SHIAC 上海", "HKIAC 香港"]
+      },
+      {
+        "id": "court-jurisdiction",
+        "name": "法院管辖",
+        "standardText": "本合同签订地/履行地/被告住所地有管辖权的人民法院管辖。",
+        "riskLevel": "medium",
+        "negotiationPoints": ["管辖法院", "约定管辖的效力", "协议管辖的限制"],
+        "recommendedApproach": "优先选择约定仲裁"
+      }
+    ]
+  },
+  {
+    "id": "termination-effects",
+    "category": "终止后条款",
+    "clauses": [
+      {
+        "id": "post-termination",
+        "name": "终止后义务",
+        "standardText": "合同终止后，乙方应：1）停止使用甲方保密信息；2）返还或销毁所有甲方资料；3）完成已启动工作的交接；4）继续履行保密义务。",
+        "riskLevel": "low",
+        "negotiationPoints": ["资料返还方式", "交接期限", "保密延续"],
+        "recommendedScope": "保密+数据返还+工作交接"
+      },
+      {
+        "id": "survival",
+        "name": "存续条款",
+        "standardText": "本合同中关于保密义务、知识产权归属、争议解决、违约责任的条款在合同终止后继续有效。",
+        "riskLevel": "low",
+        "negotiationPoints": ["存续范围", "存续期限"],
+        "alwaysInclude": true
+      }
+    ]
+  }
+]

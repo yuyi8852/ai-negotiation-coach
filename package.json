@@ -1,13 +1,16 @@
 {
   "name": "ai-negotiation-coach",
-  "version": "1.0.0",
-  "description": "AI 商务谈判官 - 基于 MiMo 多模态大模型的智能谈判分析系统",
+  "version": "2.0.0",
+  "description": "AI 商务谈判官 - 基于 MiMo 多模态大模型的智能谈判分析系统（8 Agent 协作）",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "test": "node tests/agents.test.js && node tests/utils.test.js",
+    "test:agents": "node tests/agents.test.js",
+    "test:utils": "node tests/utils.test.js"
   },
-  "keywords": ["ai", "negotiation", "mimo", "xiaomi", "multi-agent"],
+  "keywords": ["ai", "negotiation", "mimo", "xiaomi", "multi-agent", "legal", "emotion", "market-intel"],
   "author": "yuyi8852",
   "license": "MIT",
   "dependencies": {},
