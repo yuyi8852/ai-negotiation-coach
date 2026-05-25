@@ -1,0 +1,66 @@
+[
+  {
+    "id": "unlimited-liability",
+    "name": "无限责任条款",
+    "description": "合同中约定一方承担无限责任，可能导致重大损失",
+    "severity": "high",
+    "keywords": ["无限责任", "全部损失", "连带责任"],
+    "mitigation": "建议设置责任上限，明确赔偿范围和最高限额"
+  },
+  {
+    "id": "unilateral-termination",
+    "name": "单方面终止权",
+    "description": "对方可以单方面终止合同，我方缺乏对等权利",
+    "severity": "high",
+    "keywords": ["单方终止", "随时终止", "无需理由"],
+    "mitigation": "要求对等终止权，设置提前通知期和违约补偿"
+  },
+  {
+    "id": "vague-acceptance",
+    "name": "模糊验收标准",
+    "description": "验收标准不明确，容易产生争议",
+    "severity": "medium",
+    "keywords": ["甲方认可", "满意为止", "主观判断"],
+    "mitigation": "明确量化验收标准，设置验收流程和异议期"
+  },
+  {
+    "id": "penalty-asymmetry",
+    "name": "违约金不对等",
+    "description": "双方违约金比例或金额明显不对等",
+    "severity": "high",
+    "keywords": ["违约金", "赔偿金", "惩罚性"],
+    "mitigation": "要求违约金对等，设置合理比例（通常不超过合同金额10-20%）"
+  },
+  {
+    "id": "ip-transfer",
+    "name": "知识产权转让",
+    "description": "合同要求转让核心知识产权，可能影响后续发展",
+    "severity": "high",
+    "keywords": ["知识产权归属", "著作权转让", "专利转让"],
+    "mitigation": "明确知识产权归属，保留核心IP，仅授权使用权"
+  },
+  {
+    "id": "payment-delay",
+    "name": "付款周期过长",
+    "description": "付款条件对我方不利，影响现金流",
+    "severity": "medium",
+    "keywords": ["月结90天", "验收后60天", "分期付款"],
+    "mitigation": "争取更短付款周期，设置预付款比例，约定逾期利息"
+  },
+  {
+    "id": "non-compete",
+    "name": "竞业限制过宽",
+    "description": "竞业限制范围过广或期限过长",
+    "severity": "medium",
+    "keywords": ["竞业限制", "不得从事", "同类业务"],
+    "mitigation": "限制竞业范围和地域，缩短限制期限，约定补偿金"
+  },
+  {
+    "id": "force-majeure",
+    "name": "不可抗力条款缺失",
+    "description": "合同缺少不可抗力条款，风险应对不足",
+    "severity": "low",
+    "keywords": [],
+    "mitigation": "建议增加不可抗力条款，明确免责范围和通知义务"
+  }
+]

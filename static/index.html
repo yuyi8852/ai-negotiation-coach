@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Negotiation Coach - 商务谈判官</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a1a; color: #e0e0e0; display: flex; height: 100vh; overflow: hidden; }
+.sidebar { width: 240px; background: #0d1117; border-right: 1px solid #21262d; display: flex; flex-direction: column; }
+.sidebar-header { padding: 20px; border-bottom: 1px solid #21262d; }
+.sidebar-header h1 { font-size: 16px; color: #58a6ff; }
+.sidebar-header p { font-size: 11px; color: #8b949e; margin-top: 4px; }
+.sidebar nav { flex: 1; padding: 12px 0; }
+.sidebar nav a { display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: #8b949e; text-decoration: none; font-size: 13px; transition: all 0.2s; }
+.sidebar nav a:hover, .sidebar nav a.active { background: #161b22; color: #58a6ff; }
+.sidebar nav a .icon { font-size: 16px; width: 20px; text-align: center; }
+.main { flex: 1; overflow-y: auto; padding: 24px; }
+.page { display: none; }
+.page.active { display: block; }
+.page h2 { font-size: 20px; margin-bottom: 20px; color: #f0f6fc; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 16px; }
+.stat-card .label { font-size: 12px; color: #8b949e; margin-bottom: 4px; }
+.stat-card .value { font-size: 24px; font-weight: 700; color: #58a6ff; }
+.stat-card .sub { font-size: 11px; color: #8b949e; margin-top: 4px; }
+.agent-pipeline { display: flex; align-items: center; gap: 8px; margin: 24px 0; flex-wrap: wrap; }
+.agent-node { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 12px 16px; text-align: center; min-width: 120px; }
+.agent-node .icon { font-size: 24px; }
+.agent-node .name { font-size: 12px; color: #58a6ff; margin-top: 4px; }
+.agent-node .role { font-size: 10px; color: #8b949e; }
+.agent-node.active { border-color: #58a6ff; box-shadow: 0 0 12px rgba(88,166,255,0.3); }
+.pipeline-arrow { color: #30363d; font-size: 20px; }
+.form-section { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.form-section h3 { font-size: 14px; color: #f0f6fc; margin-bottom: 12px; }
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; font-size: 12px; color: #8b949e; margin-bottom: 4px; }
+.form-group input, .form-group textarea, .form-group select { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 8px 12px; color: #e0e0e0; font-size: 13px; }
+.form-group textarea { min-height: 80px; resize: vertical; }
+.btn { background: #238636; color: #fff; border: none; border-radius: 6px; padding: 10px 20px; font-size: 13px; cursor: pointer; transition: background 0.2s; }
+.btn:hover { background: #2ea043; }
+.btn:disabled { background: #21262d; color: #484f58; cursor: not-allowed; }
+.btn-secondary { background: #21262d; }
+.btn-secondary:hover { background: #30363d; }
+.timeline { margin: 20px 0; }
+.timeline-item { display: flex; gap: 12px; padding: 8px 0; border-left: 2px solid #21262d; margin-left: 8px; padding-left: 16px; }
+.timeline-item.complete { border-left-color: #238636; }
+.timeline-item.running { border-left-color: #58a6ff; }
+.timeline-item.error { border-left-color: #f85149; }
+.timeline-item .time { font-size: 11px; color: #484f58; min-width: 60px; }
+.timeline-item .msg { font-size: 13px; }
+.risk-bar { height: 6px; background: #21262d; border-radius: 3px; overflow: hidden; margin-top: 4px; }
+.risk-bar .fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+.risk-high { background: #f85149; }
+.risk-medium { background: #d29922; }
+.risk-low { background: #238636; }
+.checklist { list-style: none; }
+.checklist li { padding: 6px 0; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+.checklist li::before { content: '☐'; color: #484f58; }
+.log-box { background: #0d1117; border: 1px solid #21262d; border-radius: 6px; padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; max-height: 300px; overflow-y: auto; }
+.log-line { padding: 2px 0; }
+.log-line .ts { color: #484f58; }
+.log-line .ok { color: #238636; }
+.log-line .warn { color: #d29922; }
+.log-line .err { color: #f85149; }
+.log-line .info { color: #58a6ff; }
+.empty-state { text-align: center; padding: 60px 20px; color: #484f58; }
+.empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 500; }
+.badge-green { background: #238636; color: #fff; }
+.badge-yellow { background: #d29922; color: #000; }
+.badge-red { background: #f85149; color: #fff; }
+.badge-blue { background: #1f6feb; color: #fff; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.session-list { list-style: none; }
+.session-item { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; cursor: pointer; transition: border-color 0.2s; }
+.session-item:hover { border-color: #58a6ff; }
+.session-item .title { font-size: 14px; color: #f0f6fc; }
+.session-item .meta { font-size: 11px; color: #8b949e; margin-top: 4px; }
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <h1>🎯 Negotiation Coach</h1>
+    <p>AI 商务谈判官 v1.0</p>
+  </div>
+  <nav>
+    <a href="#" class="active" data-page="dashboard"><span class="icon">📊</span> 仪表盘</a>
+    <a href="#" data-page="new-analysis"><span class="icon">🔍</span> 新建分析</a>
+    <a href="#" data-page="history"><span class="icon">📋</span> 历史记录</a>
+    <a href="#" data-page="agents"><span class="icon">🤖</span> Agent 架构</a>
+  </nav>
+</aside>
+
+<main class="main">
+  <!-- 仪表盘 -->
+  <div id="page-dashboard" class="page active">
+    <h2>📊 系统仪表盘</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="label">总会话数</div>
+        <div class="value" id="stat-sessions">0</div>
+        <div class="sub">历史分析次数</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">总 Token 消耗</div>
+        <div class="value" id="stat-tokens">0</div>
+        <div class="sub">MiMo API 调用</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">API 调用次数</div>
+        <div class="value" id="stat-calls">0</div>
+        <div class="sub">Omni / Pro / TTS</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">运行模式</div>
+        <div class="value" id="stat-mode">Demo</div>
+        <div class="sub" id="stat-uptime">-</div>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom:12px;color:#f0f6fc;">🔗 Agent 协作流水线</h3>
+    <div class="agent-pipeline" id="pipeline">
+      <div class="agent-node"><div class="icon">📄</div><div class="name">DocumentAnalyst</div><div class="role">文档分析师</div></div>
+      <div class="pipeline-arrow">→</div>
+      <div class="agent-node"><div class="icon">⚠️</div><div class="name">RiskAssessor</div><div class="role">风险评估师</div></div>
+      <div class="pipeline-arrow">→</div>
+      <div class="agent-node"><div class="icon">🎯</div><div class="name">StrategyAdvisor</div><div class="role">策略顾问</div></div>
+      <div class="pipeline-arrow">→</div>
+      <div class="agent-node"><div class="icon">🎭</div><div class="name">CounterParty</div><div class="role">对手模拟官</div></div>
+      <div class="pipeline-arrow">→</div>
+      <div class="agent-node"><div class="icon">👔</div><div class="name">Negotiator</div><div class="role">谈判官</div></div>
+      <div class="pipeline-arrow">→</div>
+      <div class="agent-node"><div class="icon">🔊</div><div class="name">TTS</div><div class="role">语音汇报</div></div>
+    </div>
+
+    <div class="two-col" style="margin-top:20px;">
+      <div class="form-section">
+        <h3>📈 Token 消耗分布</h3>
+        <div id="token-chart" style="min-height:120px;"></div>
+      </div>
+      <div class="form-section">
+        <h3>🕐 最近活动</h3>
+        <div id="recent-activity" class="log-box" style="min-height:120px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 新建分析 -->
+  <div id="page-new-analysis" class="page">
+    <h2>🔍 新建谈判分析</h2>
+    <div class="form-section">
+      <h3>📄 文档信息</h3>
+      <div class="form-group">
+        <label>合同/文档内容（粘贴文本或上传图片）</label>
+        <textarea id="doc-text" placeholder="粘贴合同文本、邮件内容或商务文档..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>或上传文档图片</label>
+        <input type="file" id="doc-file" accept="image/*,.pdf">
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="form-section">
+        <h3>🏢 行业背景</h3>
+        <div class="form-group">
+          <label>所属行业</label>
+          <select id="industry">
+            <option value="">选择行业...</option>
+            <option value="tech">科技/互联网</option>
+            <option value="manufacturing">制造业</option>
+            <option value="finance">金融/保险</option>
+            <option value="retail">零售/电商</option>
+            <option value="construction">建筑/工程</option>
+            <option value="healthcare">医疗/健康</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>公司信息</label>
+          <textarea id="company-info" placeholder="我方公司规模、行业地位、过往合作记录..."></textarea>
+        </div>
+      </div>
+      <div class="form-section">
+        <h3>🎯 谈判目标</h3>
+        <div class="form-group">
+          <label>我方立场</label>
+          <textarea id="my-position" placeholder="我方的核心诉求和底线..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>约束条件</label>
+          <textarea id="constraints" placeholder="预算上限、时间限制、决策权限..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="form-section">
+      <h3>🎭 对手信息（可选）</h3>
+      <div class="two-col">
+        <div class="form-group">
+          <label>对手公司/个人信息</label>
+          <textarea id="opponent-info" placeholder="对方的行业地位、谈判风格、过往记录..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>市场背景</label>
+          <textarea id="market-context" placeholder="市场供需、竞争格局、价格趋势..."></textarea>
+        </div>
+      </div>
+    </div>
+    <button class="btn" id="btn-analyze" onclick="startAnalysis()">🚀 开始分析</button>
+    <div id="analysis-status" style="margin-top:16px;"></div>
+  </div>
+
+  <!-- 历史记录 -->
+  <div id="page-history" class="page">
+    <h2>📋 分析历史</h2>
+    <ul class="session-list" id="session-list"></ul>
+    <div class="empty-state" id="history-empty">
+      <div class="icon">📭</div>
+      <p>暂无分析记录</p>
+      <p style="margin-top:8px;"><a href="#" data-page="new-analysis" style="color:#58a6ff;">创建第一次分析 →</a></p>
+    </div>
+  </div>
+
+  <!-- Agent 架构 -->
+  <div id="page-agents" class="page">
+    <h2>🤖 Agent 架构</h2>
+    <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="form-section">
+        <h3>📄 文档分析师</h3>
+        <p style="font-size:12px;color:#8b949e;">MiMo-V2-Omni 多模态识别</p>
+        <p style="font-size:12px;margin-top:8px;">识别合同类型、提取关键条款、发现风险条款、识别各方主体</p>
+        <div style="margin-top:8px;"><span class="badge badge-blue">Omni</span> <span class="badge badge-green">视觉理解</span></div>
+      </div>
+      <div class="form-section">
+        <h3>⚠️ 风险评估师</h3>
+        <p style="font-size:12px;color:#8b949e;">MiMo-V2-Pro 推理引擎</p>
+        <p style="font-size:12px;margin-top:8px;">6维度风险评估、量化评分、隐蔽风险发现、风险趋势预测</p>
+        <div style="margin-top:8px;"><span class="badge badge-blue">Pro</span> <span class="badge badge-yellow">深度推理</span></div>
+      </div>
+      <div class="form-section">
+        <h3>🎯 策略顾问</h3>
+        <p style="font-size:12px;color:#8b949e;">MiMo-V2-Pro 推理引擎</p>
+        <p style="font-size:12px;margin-top:8px;">BATNA/ZOPA分析、多阶段策略、让步策略、双赢机会识别</p>
+        <div style="margin-top:8px;"><span class="badge badge-blue">Pro</span> <span class="badge badge-green">策略规划</span></div>
+      </div>
+      <div class="form-section">
+        <h3>🎭 对手模拟官</h3>
+        <p style="font-size:12px;color:#8b949e;">MiMo-V2-Pro 推理引擎</p>
+        <p style="font-size:12px;margin-top:8px;">模拟对方立场、预测回应、识别谈判陷阱、生成应对建议</p>
+        <div style="margin-top:8px;"><span class="badge badge-blue">Pro</span> <span class="badge badge-red">对抗模拟</span></div>
+      </div>
+      <div class="form-section">
+        <h3>👔 谈判官/主持人</h3>
+        <p style="font-size:12px;color:#8b949e;">MiMo-V2-Pro + TTS</p>
+        <p style="font-size:12px;margin-top:8px;">综合分析、生成报告、准备谈判清单、语音汇报</p>
+        <div style="margin-top:8px;"><span class="badge badge-blue">Pro</span> <span class="badge badge-yellow">TTS</span></div>
+      </div>
+      <div class="form-section">
+        <h3>🔊 语音合成</h3>
+        <p style="font-size:12px;color:#8b949e;">MiMo-V2.5-TTS 语音引擎</p>
+        <p style="font-size:12px;margin-top:8px;">将谈判报告转化为2分钟语音简报，支持播放和下载</p>
+        <div style="margin-top:8px;"><span class="badge badge-yellow">TTS</span> <span class="badge badge-green">语音输出</span></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+// 页面导航
+document.querySelectorAll('.sidebar nav a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const page = a.dataset.page;
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.sidebar nav a').forEach(l => l.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    a.classList.add('active');
+    if (page === 'history') loadSessions();
+    if (page === 'dashboard') loadStats();
+  });
+});
+
+// 加载统计
+async function loadStats() {
+  try {
+    const res = await fetch('/api/stats');
+    const data = await res.json();
+    document.getElementById('stat-sessions').textContent = data.sessions || 0;
+    document.getElementById('stat-tokens').textContent = (data.totalTokens || 0).toLocaleString();
+    document.getElementById('stat-calls').textContent = data.totalCalls || 0;
+    document.getElementById('stat-mode').textContent = data.demoMode ? 'Demo' : 'Live';
+    document.getElementById('stat-uptime').textContent = `运行 ${Math.floor(data.uptime / 60)} 分钟`;
+
+    // Token 分布
+    const chart = document.getElementById('token-chart');
+    const byModel = data.byModel || {};
+    let html = '';
+    for (const [model, stats] of Object.entries(byModel)) {
+      const pct = data.totalTokens > 0 ? (stats.tokens / data.totalTokens * 100) : 0;
+      html += `<div style="margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;font-size:12px;">
+          <span>${model}</span><span>${stats.tokens.toLocaleString()} tokens (${stats.calls} calls)</span>
+        </div>
+        <div class="risk-bar"><div class="fill" style="width:${pct}%;background:#58a6ff;"></div></div>
+      </div>`;
+    }
+    chart.innerHTML = html || '<p style="color:#484f58;font-size:12px;">暂无数据</p>';
+  } catch (err) {
+    console.error('Failed to load stats:', err);
+  }
+}
+
+// 加载历史
+async function loadSessions() {
+  try {
+    const res = await fetch('/api/sessions');
+    const sessions = await res.json();
+    const list = document.getElementById('session-list');
+    const empty = document.getElementById('history-empty');
+
+    if (sessions.length === 0) {
+      list.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+
+    empty.style.display = 'none';
+    list.innerHTML = sessions.map(s => `
+      <li class="session-item">
+        <div class="title">${s.input?.document?.text?.substring(0, 50) || '未命名分析'}</div>
+        <div class="meta">
+          <span class="badge ${s.status === 'completed' ? 'badge-green' : s.status === 'failed' ? 'badge-red' : 'badge-yellow'}">${s.status}</span>
+          ${s.stats ? `${s.stats.totalTokens?.toLocaleString() || 0} tokens · ${s.stats.totalCalls || 0} calls` : ''}
+          · ${new Date(s.createdAt).toLocaleString('zh-CN')}
+        </div>
+      </li>
+    `).join('');
+  } catch (err) {
+    console.error('Failed to load sessions:', err);
+  }
+}
+
+// 开始分析
+async function startAnalysis() {
+  const btn = document.getElementById('btn-analyze');
+  const status = document.getElementById('analysis-status');
+  btn.disabled = true;
+  status.innerHTML = '<div class="log-box"><div class="log-line"><span class="info">🔄 正在启动分析流水线...</span></div></div>';
+
+  const input = {
+    document: {
+      text: document.getElementById('doc-text').value || '示例合同文本：甲方（供应商）向乙方（采购方）提供技术服务，合同金额100万元，合同期限2年，付款方式为月结60天。违约金为合同金额的20%。',
+    },
+    industry: document.getElementById('industry').value,
+    companyInfo: document.getElementById('company-info').value,
+    myPosition: document.getElementById('my-position').value,
+    constraints: document.getElementById('constraints').value,
+    opponentInfo: document.getElementById('opponent-info').value,
+    marketContext: document.getElementById('market-context').value,
+  };
+
+  try {
+    const res = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input),
+    });
+    const data = await res.json();
+
+    status.innerHTML = `<div class="log-box">
+      <div class="log-line"><span class="ok">✅ 会话已创建: ${data.sessionId}</span></div>
+      <div class="log-line"><span class="info">🔄 5个Agent正在协作分析...</span></div>
+      <div class="log-line"><span class="ts">预计需要 30-60 秒</span></div>
+    </div>`;
+
+    // 轮询结果
+    const poll = setInterval(async () => {
+      try {
+        const sRes = await fetch(`/api/session/${data.sessionId}`);
+        const session = await sRes.json();
+        if (session.status === 'completed') {
+          clearInterval(poll);
+          btn.disabled = false;
+          status.innerHTML = `<div class="log-box">
+            <div class="log-line"><span class="ok">✅ 分析完成!</span></div>
+            ${session.timeline?.map(t => `<div class="log-line"><span class="ts">${t.agent}</span> <span class="${t.status === 'complete' ? 'ok' : 'info'}">${t.message}</span></div>`).join('') || ''}
+            <div class="log-line"><span class="info">📊 ${session.stats?.totalTokens || 0} tokens · ${session.stats?.totalCalls || 0} calls</span></div>
+          </div>`;
+        } else if (session.status === 'failed') {
+          clearInterval(poll);
+          btn.disabled = false;
+          status.innerHTML = `<div class="log-box"><div class="log-line"><span class="err">❌ 分析失败: ${session.error}</span></div></div>`;
+        }
+      } catch {}
+    }, 3000);
+  } catch (err) {
+    btn.disabled = false;
+    status.innerHTML = `<div class="log-box"><div class="log-line"><span class="err">❌ 请求失败: ${err.message}</span></div></div>`;
+  }
+}
+
+// 初始化
+loadStats();
+</script>
+</body>
+</html>
